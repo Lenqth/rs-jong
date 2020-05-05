@@ -97,7 +97,7 @@ impl FullRecurer {
         if pops[k] >= 3 {
             self.state.push(Group::ConcPong((k + self.base) as u8));
             pops[k] -= 3;
-            self.recur_mentu(pops, k + 1, 1, s3 + 1, at);
+            self.recur_mentu(pops, k, 1, s3 + 1, at);
             pops[k] += 3;
             self.state.pop();
         }
@@ -109,7 +109,7 @@ impl FullRecurer {
                 pops[k] -= 1;
                 pops[k + 1] -= 1;
                 pops[k + 2] -= 1;
-                self.recur_mentu(pops, k + 1, 1, s3 + 1, at);
+                self.recur_mentu(pops, k, 1, s3 + 1, at);
                 pops[k] += 1;
                 pops[k + 1] += 1;
                 pops[k + 2] += 1;
@@ -392,6 +392,32 @@ mod tests {
             is_agari_normal(&TilesInfo::from_str("123m456p789sESWNN")?),
             Vec::<Agari>::new()
         );
+        assert_eq!(
+            is_agari_normal(&TilesInfo::from_str("22334455667788m")?),
+            vec![
+                Agari::Normal(vec![
+                    Group::ConcChow(2),
+                    Group::ConcChow(2),
+                    Group::ConcChow(5),
+                    Group::ConcChow(5),
+                    Group::Pair(8)
+                ]),
+                Agari::Normal(vec![
+                    Group::ConcChow(2),
+                    Group::ConcChow(2),
+                    Group::ConcChow(6),
+                    Group::ConcChow(6),
+                    Group::Pair(5)
+                ]),
+                Agari::Normal(vec![
+                    Group::ConcChow(3),
+                    Group::ConcChow(3),
+                    Group::ConcChow(6),
+                    Group::ConcChow(6),
+                    Group::Pair(2)
+                ])
+            ]
+        );
         Ok(())
     }
     #[test]
@@ -422,46 +448,106 @@ mod tests {
     }
     #[test]
     fn test_total() -> Result<(), Box<dyn std::error::Error>> {
+        use self::Agari::*;
+        use self::Group::*;
+
         assert_eq!(
             is_agari(&TilesInfo::from_str("147m25811p369567s")?)
                 .map(|x| x.agaris)
                 .unwrap_or_else(|| vec![]),
-            vec![Agari::Normal(vec![
-                Group::ConcChow(37),
-                Group::KnitChow(1),
-                Group::KnitChow(18),
-                Group::KnitChow(35),
-                Group::Pair(17),
+            vec![Normal(vec![
+                ConcChow(37),
+                KnitChow(1),
+                KnitChow(18),
+                KnitChow(35),
+                Pair(17),
             ])]
         );
         assert_eq!(
             is_agari(&TilesInfo::from_str("147m2p369sESWNHRG")?)
                 .map(|x| x.agaris)
                 .unwrap_or_else(|| vec![]),
-            vec![Agari::Knitted]
+            vec![Knitted]
         );
         assert_eq!(
             is_agari(&TilesInfo::from_str("123234345m67888p")?)
                 .map(|x| x.agaris)
                 .unwrap_or_else(|| vec![]),
-            vec![Agari::Normal(vec![
-                Group::ConcChow(1),
-                Group::ConcChow(2),
-                Group::ConcChow(3),
-                Group::ConcChow(22),
-                Group::Pair(24)
+            vec![Normal(vec![
+                ConcChow(1),
+                ConcChow(2),
+                ConcChow(3),
+                ConcChow(22),
+                Pair(24)
             ])]
         );
         assert_eq!(
             is_agari(&TilesInfo::from_str("55678s45667p5p")?)
                 .map(|x| x.agaris)
                 .unwrap_or_else(|| vec![]),
-            vec![Agari::Normal(vec![
-                Group::ConcChow(20),
-                Group::ConcChow(21),
-                Group::ConcChow(38),
-                Group::Pair(37),
+            vec![Normal(vec![
+                ConcChow(20),
+                ConcChow(21),
+                ConcChow(38),
+                Pair(37),
             ])]
+        );
+        assert_eq!(
+            is_agari(&TilesInfo::from_str("222m333m444m555m99m")?)
+                .map(|x| x.agaris)
+                .unwrap_or_else(|| vec![]),
+            vec![
+                Normal(vec![
+                    ConcChow(2),
+                    ConcChow(2),
+                    ConcChow(2),
+                    ConcPong(5),
+                    Pair(9)
+                ]),
+                Normal(vec![
+                    ConcChow(3),
+                    ConcChow(3),
+                    ConcChow(3),
+                    ConcPong(2),
+                    Pair(9)
+                ]),
+                Normal(vec![
+                    ConcPong(2),
+                    ConcPong(3),
+                    ConcPong(4),
+                    ConcPong(5),
+                    Pair(9)
+                ])
+            ]
+        );
+        assert_eq!(
+            is_agari(&TilesInfo::from_str("22334455667788m")?)
+                .map(|x| x.agaris)
+                .unwrap_or_else(|| vec![]),
+            vec![
+                Normal(vec![
+                    ConcChow(2),
+                    ConcChow(2),
+                    ConcChow(5),
+                    ConcChow(5),
+                    Pair(8)
+                ]),
+                Normal(vec![
+                    ConcChow(2),
+                    ConcChow(2),
+                    ConcChow(6),
+                    ConcChow(6),
+                    Pair(5)
+                ]),
+                Normal(vec![
+                    ConcChow(3),
+                    ConcChow(3),
+                    ConcChow(6),
+                    ConcChow(6),
+                    Pair(2)
+                ]),
+                SevenPairs
+            ]
         );
         assert_eq!(is_agari(&TilesInfo::from_str("147m3469p1258sSSG")?), None);
 
