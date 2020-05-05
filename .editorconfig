@@ -1,0 +1,12 @@
+
+
+root = true
+
+[*]
+end_of_line = lf
+insert_final_newline = true
+
+[*.rs]
+indent_brace_style = K&R
+indent_style = space
+indent_size = 8
