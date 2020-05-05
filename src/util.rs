@@ -6,13 +6,17 @@ pub fn sweep_isolated(tile_fq: &Vec<i8>) -> Vec<i8> {
     while i < capacity {
         let l = max(0, (i as i32) - 2) as usize;
         let r = min(capacity - 1, i + 2) as usize;
-        for j in l..=r {
-            if i == j {
-                continue;
-            }
-            if tile_fq[j] > 0 {
-                res[i] = tile_fq[i];
-                break;
+        if tile_fq[i] >= 2 {
+            res[i] = tile_fq[i];
+        } else {
+            for j in l..=r {
+                if i == j {
+                    continue;
+                }
+                if tile_fq[j] > 0 {
+                    res[i] = tile_fq[i];
+                    break;
+                }
             }
         }
         i += 1;

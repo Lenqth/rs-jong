@@ -329,6 +329,8 @@ pub fn is_agari(hand: &TilesInfo) -> Option<AgariInfo> {
 
 #[cfg(test)]
 mod tests {
+    use self::Agari::*;
+    use self::Group::*;
     use super::*;
     use test::Bencher;
 
@@ -360,15 +362,15 @@ mod tests {
     fn test_7pairs() -> Result<(), Box<dyn std::error::Error>> {
         assert_eq!(
             is_agari_7pairs(&TilesInfo::from_str("11335577m224466p")?),
-            vec![Agari::SevenPairs]
+            vec![SevenPairs]
         );
         assert_eq!(
             is_agari_7pairs(&TilesInfo::from_str("11335577m2266pSS")?),
-            vec![Agari::SevenPairs]
+            vec![SevenPairs]
         );
         assert_eq!(
             is_agari_7pairs(&TilesInfo::from_str("1111m225599pSSHH")?),
-            vec![Agari::SevenPairs]
+            vec![SevenPairs]
         );
         assert_eq!(
             is_agari_7pairs(&TilesInfo::from_str("11335567m2266pSS")?),
@@ -380,12 +382,12 @@ mod tests {
     fn test_normal() -> Result<(), Box<dyn std::error::Error>> {
         assert_eq!(
             is_agari_normal(&TilesInfo::from_str("123m456p789sEEESS")?),
-            vec![Agari::Normal(vec![
-                Group::ConcChow(1),
-                Group::ConcChow(20),
-                Group::ConcChow(39),
-                Group::ConcPong(49),
-                Group::Pair(50)
+            vec![Normal(vec![
+                ConcChow(1),
+                ConcChow(20),
+                ConcChow(39),
+                ConcPong(49),
+                Pair(50)
             ])]
         );
         assert_eq!(
@@ -395,26 +397,26 @@ mod tests {
         assert_eq!(
             is_agari_normal(&TilesInfo::from_str("22334455667788m")?),
             vec![
-                Agari::Normal(vec![
-                    Group::ConcChow(2),
-                    Group::ConcChow(2),
-                    Group::ConcChow(5),
-                    Group::ConcChow(5),
-                    Group::Pair(8)
+                Normal(vec![
+                    ConcChow(2),
+                    ConcChow(2),
+                    ConcChow(5),
+                    ConcChow(5),
+                    Pair(8)
                 ]),
-                Agari::Normal(vec![
-                    Group::ConcChow(2),
-                    Group::ConcChow(2),
-                    Group::ConcChow(6),
-                    Group::ConcChow(6),
-                    Group::Pair(5)
+                Normal(vec![
+                    ConcChow(2),
+                    ConcChow(2),
+                    ConcChow(6),
+                    ConcChow(6),
+                    Pair(5)
                 ]),
-                Agari::Normal(vec![
-                    Group::ConcChow(3),
-                    Group::ConcChow(3),
-                    Group::ConcChow(6),
-                    Group::ConcChow(6),
-                    Group::Pair(2)
+                Normal(vec![
+                    ConcChow(3),
+                    ConcChow(3),
+                    ConcChow(6),
+                    ConcChow(6),
+                    Pair(2)
                 ])
             ]
         );
@@ -424,12 +426,12 @@ mod tests {
     fn test_knitted_normal() -> Result<(), Box<dyn std::error::Error>> {
         assert_eq!(
             is_agari_knitnormal(&TilesInfo::from_str("147m258p369s567s11p")?),
-            vec![Agari::Normal(vec![
-                Group::ConcChow(37),
-                Group::KnitChow(1),
-                Group::KnitChow(18),
-                Group::KnitChow(35),
-                Group::Pair(17),
+            vec![Normal(vec![
+                ConcChow(37),
+                KnitChow(1),
+                KnitChow(18),
+                KnitChow(35),
+                Pair(17),
             ])]
         );
         Ok(())
@@ -438,7 +440,7 @@ mod tests {
     fn test_knitted() -> Result<(), Box<dyn std::error::Error>> {
         assert_eq!(
             is_agari_knitted(&TilesInfo::from_str("147m2p369sESWNHRG")?),
-            vec![Agari::Knitted]
+            vec![Knitted]
         );
         assert_eq!(
             is_agari_knitted(&TilesInfo::from_str("147m2p399sESWNHRG")?),
@@ -448,9 +450,6 @@ mod tests {
     }
     #[test]
     fn test_total() -> Result<(), Box<dyn std::error::Error>> {
-        use self::Agari::*;
-        use self::Group::*;
-
         assert_eq!(
             is_agari(&TilesInfo::from_str("147m25811p369567s")?)
                 .map(|x| x.agaris)
