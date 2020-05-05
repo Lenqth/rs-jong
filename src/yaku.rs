@@ -341,6 +341,12 @@ impl Yaku {
 
 struct YakuCalc {}
 
+impl YakuCalc {
+    fn calc_yaku(agari: AgariInfo) -> Vec<Yaku> {
+        vec![]
+    }
+}
+
 #[test]
 fn test_aggregate_tiles() {
     assert_eq!(
