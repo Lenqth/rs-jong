@@ -46,7 +46,6 @@ mod tests {
 
     #[test]
     fn test_random() {
-        println!("{:?}", random_tiles(136));
         assert_eq!(
             random_tiles(136).tiles,
             vec![

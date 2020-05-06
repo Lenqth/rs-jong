@@ -25,7 +25,7 @@ impl FullRecurer {
         }
     }
 
-    fn start(&mut self) -> Vec<Agari> {
+    fn start(&mut self, claimed_mentu: &Vec<Group>) -> Vec<Agari> {
         let mut all_results: [Vec<Vec<Group>>; 4] = [
             Vec::default(),
             Vec::default(),
@@ -65,6 +65,7 @@ impl FullRecurer {
                 for c in all_results[2].iter() {
                     for d in all_results[3].iter() {
                         let mut i = Vec::new();
+                        i.extend(claimed_mentu.clone());
                         i.extend(a.clone());
                         i.extend(b.clone());
                         i.extend(c.clone());
@@ -117,7 +118,7 @@ impl FullRecurer {
             }
         }
     }
-    fn check_toitu(&mut self, pops: &mut [i8], k: usize, s3: u8, at: bool) {
+    fn check_toitu(&mut self, pops: &mut [i8], k: usize, s3: u8, _at: bool) {
         if pops[k] >= 2 {
             self.state.push(Group::Pair((k + self.base) as u8));
             pops[k] -= 2;
@@ -150,7 +151,7 @@ impl FullRecurer {
 
 fn is_agari_normal(hand: &TilesInfo) -> Vec<Agari> {
     let mut recurer = FullRecurer::new(&hand.tiles);
-    recurer.start()
+    recurer.start(&hand.mentu)
 }
 
 fn is_agari_7pairs(hand: &TilesInfo) -> Vec<Agari> {
@@ -236,7 +237,7 @@ fn is_agari_knitnormal(hand: &TilesInfo) -> Vec<Agari> {
             fq[SOU + i] -= 1;
         }
         let mut recurer = FullRecurer::new(&fq);
-        for item in recurer.start().iter() {
+        for item in recurer.start(&Vec::new()).iter() {
             if let Agari::Normal(v) = item {
                 let mut v = v.clone();
                 v.push(Group::KnitChow((MAN + m) as u8));
@@ -323,6 +324,7 @@ pub fn is_agari(hand: &TilesInfo) -> Option<AgariInfo> {
         Some(AgariInfo {
             tiles: hand.tiles.clone(),
             agaris: res,
+            last_tile: hand.last_tile,
         })
     }
 }

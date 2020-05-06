@@ -341,9 +341,9 @@ impl Yaku {
 }
 
 pub struct YakuCalc {
-    agari: Agari,
-    yakus: Vec<Yaku>,
-    score: u32,
+    pub agari: Agari,
+    pub yakus: Vec<Yaku>,
+    pub score: u32,
 }
 
 impl YakuCalc {
@@ -355,6 +355,7 @@ impl YakuCalc {
             let res = Self::calc_yaku(SingleAgariInfo {
                 tiles: &agari.tiles,
                 agari: item,
+                last_tile: agari.last_tile,
             });
 
             let total: u32 = res.iter().map(|x| x.score()).sum();
@@ -376,7 +377,9 @@ impl YakuCalc {
     fn calc_yaku(agari: SingleAgariInfo) -> Vec<Yaku> {
         let mut res = Vec::<Yaku>::new();
         match agari.agari {
-            Agari::Normal(pat) => {}
+            Agari::Normal(pat) => {
+                res.extend(Self::calc_kongs(pat));
+            }
             Agari::SevenPairs => {
                 let mut state = -1;
                 for v in agari.tiles.iter() {
@@ -470,11 +473,27 @@ mod tests {
 
     #[test]
     fn test_kongs() -> Result<(), Box<dyn std::error::Error>> {
+        use self::Group::*;
+        let kong4 = TilesInfo::parse_full("*1111mk *2222mk *3333mk *4444mk RR")?;
         assert_eq!(
-            calcurate_score(TilesInfo::from_str("123m6m8m9mW")?)
+            kong4,
+            TilesInfo {
+                tiles: vec![
+                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                    0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+                ],
+                mentu: vec![MinKong(1), MinKong(2), MinKong(3), MinKong(4)],
+                last_tile: LastTile::Claimed(54)
+            }
+        );
+        assert_eq!(
+            calcurate_score(kong4)
                 .map(|x| x.yakus)
                 .unwrap_or_else(|| vec![]),
-            vec![]
+            vec![Yaku::Kong4]
         );
         Ok(())
     }

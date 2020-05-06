@@ -11,17 +11,33 @@ pub enum Agari {
 
 #[derive(Debug, Clone, Eq, PartialEq, Ord, PartialOrd)]
 pub struct AgariInfo {
+    /// last_tile tile (also contained in .tiles)
+    pub last_tile: LastTile,
+
     pub tiles: Vec<i8>,
     pub agaris: Vec<Agari>,
 }
 #[derive(Debug, Clone, Eq, PartialEq, Ord, PartialOrd)]
 pub struct SingleAgariInfo<'a> {
+    /// last_tile tile (also contained in .tiles)
+    pub last_tile: LastTile,
+
     pub tiles: &'a Vec<i8>,
     pub agari: &'a Agari,
 }
 
+#[derive(Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Copy)]
+pub enum LastTile {
+    Tsumo(Tile),
+    Claimed(Tile),
+    None,
+}
+
 #[derive(Debug, Clone, Eq, PartialEq, Ord, PartialOrd)]
 pub struct TilesInfo {
+    /// last_tile tile (also contained in .tiles)
+    pub last_tile: LastTile,
+
     pub tiles: Vec<i8>,
     pub mentu: Vec<Group>,
 }
@@ -29,6 +45,7 @@ pub struct TilesInfo {
 impl TilesInfo {
     pub fn new() -> TilesInfo {
         return TilesInfo {
+            last_tile: LastTile::None,
             tiles: vec![0i8; 128],
             mentu: vec![],
         };
@@ -51,20 +68,19 @@ impl TilesInfo {
         }
         res
     }
+    ///
+    ///
+    ///
+    ///
+    pub fn parse_full(s: &str) -> Result<TilesInfo, std::fmt::Error> {
+        let s_last = s.chars().last().unwrap();
+        let tsumo = s_last == '!';
+        let s = if tsumo { &s[..(s.len() - 1)] } else { &s[..] };
 
-    fn parse_full(s: &str) -> Result<TilesInfo, std::fmt::Error> {
+        let mut last_tile: Tile = 0;
         let tokens = s.split(' ');
         let mut result = TilesInfo::new();
-        let tsumo = false;
         for token in tokens {
-            let last = token.chars().last().unwrap();
-            let tsumo = last == '!';
-            let token = if tsumo {
-                &token[..(token.len() - 1)]
-            } else {
-                &token[..]
-            };
-
             if token.chars().next().unwrap() == '*' {
                 let last = token.chars().last().unwrap();
                 match last {
@@ -99,15 +115,20 @@ impl TilesInfo {
                 let list = Self::parse(token)?;
                 for item in list.iter() {
                     result.tiles[(*item) as usize] += 1;
+                    last_tile = *item;
                 }
             }
         }
+        result.last_tile = if tsumo {
+            LastTile::Tsumo(last_tile)
+        } else {
+            LastTile::Claimed(last_tile)
+        };
         Ok(result)
     }
 
     fn parse(s: &str) -> Result<Vec<Tile>, std::fmt::Error> {
         let mut list = Vec::<Tile>::new();
-        let mut groups = Vec::<Group>::new();
         let mut pending_numbers = Vec::<u8>::new();
 
         for c in s.chars() {
@@ -322,7 +343,8 @@ mod tests {
                     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
                 ],
-                mentu: vec![MinKong(1), MinKong(2), MinKong(3), MinKong(4)]
+                mentu: vec![MinKong(1), MinKong(2), MinKong(3), MinKong(4)],
+                last_tile: LastTile::Claimed(54)
             }
         );
         Ok(())
