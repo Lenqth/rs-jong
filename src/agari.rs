@@ -556,7 +556,7 @@ mod tests {
     #[bench]
     fn bench_agari(b: &mut Bencher) {
         let mut cases = Vec::new();
-        for i in 0..10000 {
+        for _ in 0..10000 {
             cases.push(random_tiles(14));
         }
         let cases = cases;

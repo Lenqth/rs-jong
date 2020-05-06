@@ -13,13 +13,14 @@ pub fn aggregate_tiles(tiles: Vec<Tile>, groups: Vec<Group>) -> TileFreq {
     return all_tiles_freq;
 }
 
+#[derive(Debug, Clone, Eq, PartialEq, Ord, PartialOrd)]
 pub enum Yaku {
     // 88
     Wind4,
     Dragon3,
     AllGreen,
     NineGates,
-    FourKongs,
+    Kong4,
     SevenShiftedPairs,
     ThirteenOrphans,
 
@@ -339,11 +340,111 @@ impl Yaku {
     }
 }
 
-struct YakuCalc {}
+pub struct YakuCalc {
+    agari: Agari,
+    yakus: Vec<Yaku>,
+    score: u32,
+}
 
 impl YakuCalc {
-    fn calc_yaku(agari: AgariInfo) -> Vec<Yaku> {
-        vec![]
+    pub fn calc_all_yaku(agari: AgariInfo) -> Option<YakuCalc> {
+        let mut max_item: Option<Agari> = None;
+        let mut max_yaku: Vec<Yaku> = Vec::new();
+        let mut max_score: u32 = 0;
+        for item in agari.agaris.iter() {
+            let res = Self::calc_yaku(SingleAgariInfo {
+                tiles: &agari.tiles,
+                agari: item,
+            });
+
+            let total: u32 = res.iter().map(|x| x.score()).sum();
+            if total > max_score {
+                max_item = Some(item.clone());
+                max_score = total;
+                max_yaku = res.clone();
+            }
+        }
+        if let Some(agari) = max_item {
+            return Some(YakuCalc {
+                agari: agari,
+                yakus: max_yaku,
+                score: max_score,
+            });
+        }
+        None
+    }
+    fn calc_yaku(agari: SingleAgariInfo) -> Vec<Yaku> {
+        let mut res = Vec::<Yaku>::new();
+        match agari.agari {
+            Agari::Normal(pat) => {}
+            Agari::SevenPairs => {
+                let mut state = -1;
+                for v in agari.tiles.iter() {
+                    if state == -1 {
+                        if *v == 2 {
+                            state = 1;
+                        } else if *v > 2 {
+                            res.push(Yaku::SevenPairs);
+                            break;
+                        }
+                    } else {
+                        if *v == 2 {
+                            state += 1;
+                            if state == 7 {
+                                res.push(Yaku::SevenShiftedPairs);
+                                break;
+                            }
+                        } else {
+                            res.push(Yaku::SevenPairs);
+                            break;
+                        }
+                    }
+                }
+            }
+            Agari::ThirteenOrphans => {
+                res.push(Yaku::ThirteenOrphans);
+            }
+            Agari::Knitted => {
+                res.push(Yaku::GreaterKnits);
+            }
+        }
+        res
+    }
+    fn calc_kongs(groups: &Vec<Group>) -> Vec<Yaku> {
+        let mut kongs = 0;
+        let mut c_kongs = 0;
+        for g in groups.iter() {
+            if g.is_kong() {
+                if g.consealed() {
+                    c_kongs += 1;
+                }
+                kongs += 1;
+            }
+        }
+        if c_kongs >= 2 {
+            match kongs {
+                4 => vec![Yaku::Kong4, Yaku::ConcKong2],
+                3 => vec![Yaku::Kong3, Yaku::ConcKong2],
+                2 => vec![Yaku::ConcKong2],
+                _ => panic!("Impossible"),
+            }
+        } else if c_kongs >= 1 {
+            match kongs {
+                4 => vec![Yaku::Kong4, Yaku::ConcKong],
+                3 => vec![Yaku::Kong3, Yaku::ConcKong],
+                2 => vec![Yaku::Kong2, Yaku::ConcKong],
+                1 => vec![Yaku::ConcKong],
+                _ => panic!("Impossible"),
+            }
+        } else {
+            match kongs {
+                4 => vec![Yaku::Kong4],
+                3 => vec![Yaku::Kong3],
+                2 => vec![Yaku::Kong2],
+                1 => vec![Yaku::Kong1],
+                _ => vec![],
+            }
+        }
     }
 }
 
@@ -356,4 +457,25 @@ fn test_aggregate_tiles() {
         )[0..=9],
         [0, 1, 1, 2, 1, 1, 0, 3, 4, 0]
     )
+}
+use crate::agari::is_agari;
+pub fn calcurate_score(t: TilesInfo) -> Option<YakuCalc> {
+    let agari = is_agari(&t)?;
+    YakuCalc::calc_all_yaku(agari)
+}
+
+mod tests {
+    use super::*;
+    use std::str::FromStr;
+
+    #[test]
+    fn test_kongs() -> Result<(), Box<dyn std::error::Error>> {
+        assert_eq!(
+            calcurate_score(TilesInfo::from_str("123m6m8m9mW")?)
+                .map(|x| x.yakus)
+                .unwrap_or_else(|| vec![]),
+            vec![]
+        );
+        Ok(())
+    }
 }

@@ -14,18 +14,23 @@ pub struct AgariInfo {
     pub tiles: Vec<i8>,
     pub agaris: Vec<Agari>,
 }
+#[derive(Debug, Clone, Eq, PartialEq, Ord, PartialOrd)]
+pub struct SingleAgariInfo<'a> {
+    pub tiles: &'a Vec<i8>,
+    pub agari: &'a Agari,
+}
 
 #[derive(Debug, Clone, Eq, PartialEq, Ord, PartialOrd)]
 pub struct TilesInfo {
     pub tiles: Vec<i8>,
-    pub mentu: Option<Vec<Group>>,
+    pub mentu: Vec<Group>,
 }
 
 impl TilesInfo {
     pub fn new() -> TilesInfo {
         return TilesInfo {
             tiles: vec![0i8; 128],
-            mentu: None,
+            mentu: vec![],
         };
     }
 
@@ -47,9 +52,64 @@ impl TilesInfo {
         res
     }
 
+    fn parse_full(s: &str) -> Result<TilesInfo, std::fmt::Error> {
+        let tokens = s.split(' ');
+        let mut result = TilesInfo::new();
+        let tsumo = false;
+        for token in tokens {
+            let last = token.chars().last().unwrap();
+            let tsumo = last == '!';
+            let token = if tsumo {
+                &token[..(token.len() - 1)]
+            } else {
+                &token[..]
+            };
+
+            if token.chars().next().unwrap() == '*' {
+                let last = token.chars().last().unwrap();
+                match last {
+                    'k' => {
+                        let list = Self::parse(&token[1..(token.len() - 1)])?;
+                        result.mentu.push(Group::MinKong(list[0]));
+                    }
+                    'a' => {
+                        let list = Self::parse(&token[1..(token.len() - 1)])?;
+                        result.mentu.push(Group::ApKong(list[0]));
+                    }
+                    'c' => {
+                        let list = Self::parse(&token[1..(token.len() - 1)])?;
+                        result.mentu.push(Group::ConcKong(list[0]));
+                    }
+                    _ => {
+                        let list = Self::parse(&token[1..])?;
+                        if list.len() == 3 {
+                            if list[0] == list[1] && list[1] == list[2] {
+                                result.mentu.push(Group::Pong(list[0]));
+                            } else if list[0] + 1 == list[1] && list[1] + 1 == list[2] {
+                                result.mentu.push(Group::Chow(list[0]));
+                            } else {
+                                return Err(std::fmt::Error);
+                            }
+                        } else {
+                            return Err(std::fmt::Error);
+                        }
+                    }
+                }
+            } else {
+                let list = Self::parse(token)?;
+                for item in list.iter() {
+                    result.tiles[(*item) as usize] += 1;
+                }
+            }
+        }
+        Ok(result)
+    }
+
     fn parse(s: &str) -> Result<Vec<Tile>, std::fmt::Error> {
         let mut list = Vec::<Tile>::new();
+        let mut groups = Vec::<Group>::new();
         let mut pending_numbers = Vec::<u8>::new();
+
         for c in s.chars() {
             if !pending_numbers.is_empty() {
                 match c {
@@ -169,8 +229,8 @@ pub enum Group {
 }
 
 impl Group {
-    pub fn components(self) -> Vec<Tile> {
-        match self {
+    pub fn components(&self) -> Vec<Tile> {
+        match *self {
             Self::Chow(head) => vec![head, head + 1, head + 2],
             Self::Pong(head) => vec![head, head, head],
             Self::ConcKong(head) => vec![head, head, head, head],
@@ -183,7 +243,7 @@ impl Group {
         }
     }
 
-    pub fn consealed(self) -> bool {
+    pub fn consealed(&self) -> bool {
         match self {
             Self::Chow(_) => false,
             Self::Pong(_) => false,
@@ -194,6 +254,45 @@ impl Group {
             Self::ConcPong(_) => true,
             Self::Pair(_) => true,
             Self::KnitChow(_) => true,
+        }
+    }
+    pub fn is_kong(&self) -> bool {
+        match self {
+            Self::Chow(_) => false,
+            Self::Pong(_) => false,
+            Self::ApKong(_) => true,
+            Self::MinKong(_) => true,
+            Self::ConcKong(_) => true,
+            Self::ConcChow(_) => false,
+            Self::ConcPong(_) => false,
+            Self::Pair(_) => false,
+            Self::KnitChow(_) => false,
+        }
+    }
+    pub fn is_pong(&self) -> bool {
+        match self {
+            Self::Chow(_) => false,
+            Self::Pong(_) => true,
+            Self::ApKong(_) => false,
+            Self::MinKong(_) => false,
+            Self::ConcKong(_) => false,
+            Self::ConcChow(_) => false,
+            Self::ConcPong(_) => true,
+            Self::Pair(_) => false,
+            Self::KnitChow(_) => false,
+        }
+    }
+    pub fn is_chow(&self) -> bool {
+        match self {
+            Self::Chow(_) => true,
+            Self::Pong(_) => false,
+            Self::ApKong(_) => false,
+            Self::MinKong(_) => false,
+            Self::ConcKong(_) => false,
+            Self::ConcChow(_) => true,
+            Self::ConcPong(_) => false,
+            Self::Pair(_) => false,
+            Self::KnitChow(_) => false,
         }
     }
 }
@@ -207,6 +306,24 @@ mod tests {
         assert_eq!(
             TilesInfo::from_str("123m6m8m9mW")?.tiles[1..=9],
             [1, 1, 1, 0, 0, 1, 0, 1, 1]
+        );
+        Ok(())
+    }
+    #[test]
+    fn test_full_parse() -> Result<(), Box<dyn std::error::Error>> {
+        use self::Group::*;
+        assert_eq!(
+            TilesInfo::parse_full("*1111mk *2222mk *3333mk *4444mk RR")?,
+            TilesInfo {
+                tiles: vec![
+                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                    0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+                ],
+                mentu: vec![MinKong(1), MinKong(2), MinKong(3), MinKong(4)]
+            }
         );
         Ok(())
     }
