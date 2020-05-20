@@ -70,6 +70,7 @@ pub enum Yaku {
     MixedStraight,
     Reversible,
     ShiftPong3c,
+    SamePong3c,
     ChickenHand,
     LastDraw,
     LastClaim,
@@ -120,113 +121,120 @@ pub enum Yaku {
     Flower,
 }
 
+impl ToString for Yaku {
+    fn to_string(&self) -> String {
+        self.name().to_string()
+    }
+}
+
 impl Yaku {
     pub fn name(&self) -> &str {
         use self::Yaku::*;
         match self {
             // 88
-            Wind4 => "",
-            Dragon3 => "",
-            AllGreen => "",
-            NineGates => "",
-            FourKongs => "",
-            SevenShiftedPairs => "",
-            ThirteenOrphans => "",
+            Wind4 => "大四喜",
+            Dragon3 => "大三元",
+            AllGreen => "緑一色",
+            NineGates => "九連宝燈",
+            Kong4 => "四槓",
+            SevenShiftedPairs => "連七対",
+            ThirteenOrphans => "十三么",
 
             // 66
-            AllTerminals => "",
-            Wind4s => "",
-            AllHonors => "",
-            ConcPongs4 => "",
-            Souryu1c => "",
+            AllTerminals => "清么九",
+            Wind4s => "小四喜",
+            AllHonors => "字一色",
+            ConcPongs4 => "四暗刻",
+            Souryu1c => "一色双龍会",
 
             // 48
-            SameChow4 => "",
-            ShiftPong4 => "",
+            SameChow4 => "一色四同順",
+            ShiftPong4 => "一色四節高",
 
             // 32
-            ShiftChow4 => "",
-            Kong3 => "",
-            AllTermOrHonor => "",
+            ShiftChow4 => "一色四歩高",
+            Kong3 => "三槓",
+            AllTermOrHonor => "混么九",
 
             // 24
-            SevenPairs => "",
-            GreaterKnits => "",
-            AllEvenPungs => "",
-            FullFlush => "",
-            SameChow3 => "",
-            ShiftPong3 => "",
-            All789 => "",
-            All456 => "",
-            All123 => "",
+            SevenPairs => "七対",
+            GreaterKnits => "七星不靠",
+            AllEvenPungs => "全双刻",
+            FullFlush => "清一色",
+            SameChow3 => "一色三同順",
+            ShiftPong3 => "一色三節高",
+            All789 => "全大",
+            All456 => "全中",
+            All123 => "全小",
 
             // 16
-            PureStraight => "",
-            Souryu3c => "",
-            ShiftChow3 => "",
-            AllContain5 => "",
-            SamePong3 => "",
-            ConcPong3 => "",
+            PureStraight => "清龍",
+            Souryu3c => "三色双龍会",
+            ShiftChow3 => "一色三歩高",
+            AllContain5 => "全帯五",
+            SamePong3 => "三同刻",
+            ConcPong3 => "三暗刻",
 
             // 12
-            LesserKnits => "",
-            KnitStraight => "",
-            All1234 => "",
-            All6789 => "",
-            Wind3 => "",
+            LesserKnits => "全不靠",
+            KnitStraight => "組合龍",
+            All1234 => "小于五",
+            All6789 => "大于五",
+            Wind3 => "三風刻",
 
             // 8
-            MixedStraight => "",
-            Reversible => "",
-            ShiftPong3c => "",
-            ChickenHand => "",
-            LastDraw => "",
-            LastClaim => "",
-            Replacement => "",
-            RobKong => "",
-            ConcKong2 => "",
+            MixedStraight => "花龍",
+            Reversible => "推不倒",
+            ShiftPong3c => "三色三節高",
+            SamePong3c => "三色三同順",
+            ChickenHand => "無番和",
+            LastDraw => "妙手回春",
+            LastClaim => "海底撈月",
+            Replacement => "槓上開花",
+            RobKong => "搶槓和",
+            ConcKong2 => "双暗槓",
 
             // 6
-            AllPong => "",
-            HalfFlush => "",
-            ShiftChow3c => "",
-            AllTypes => "",
-            AllMelded => "",
-            Dragon2 => "",
+            ShiftChow3c => "三色三歩高",
+            AllPong => "碰碰和",
+            HalfFlush => "混一色",
+            AllTypes => "五門斉",
+            AllMelded => "全求人",
+            Dragon2 => "双箭刻",
 
             // 4
-            AllContainOutside => "",
-            AllConc => "",
-            Kong2 => "",
-            LastTile => "",
+            AllContainOutside => "全帯么",
+            AllConc => "不求人",
+            Kong2 => "双明槓",
+            LastTile => "和絶張",
 
             // 2
-            Dragon1 => "",
-            PrevWind => "",
-            SeatWind => "",
-            ConcealedHand => "",
-            AllChows => "",
-            FourTiles => "",
-            SamePong2 => "",
-            ConcPong2 => "",
-            ConcKong => "",
-            AllSimple => "",
+            Dragon1 => "箭刻",
+            PrevWind => "圏風刻",
+            SeatWind => "門風刻",
+            ConcealedHand => "門前清",
+            AllChows => "平和",
+            FourTiles => "四帰一",
+            SamePong2 => "双同刻",
+            ConcPong2 => "双暗刻",
+            ConcKong => "暗槓",
+            AllSimple => "断么",
 
             // 1
-            DoubleChow1c => "",
-            DoubleChow2c => "",
-            SixStraight => "",
-            TwoTerminalChows => "",
-            TerminalPong => "",
-            Kong1 => "",
-            OneVoid => "",
-            NoHonor => "",
-            EdgeWait => "",
-            ClosedWait => "",
-            SingleWait => "",
-            SelfDraw => "",
+            DoubleChow1c => "一般高",
+            DoubleChow2c => "喜相逢",
+            SixStraight => "連六",
+            TwoTerminalChows => "老少副",
+            TerminalPong => "么九刻",
+            Kong1 => "明槓",
+            OneVoid => "缺一門",
+            NoHonor => "無字",
+            EdgeWait => "辺張",
+            ClosedWait => "坎張",
+            SingleWait => "単調将",
+            SelfDraw => "自摸",
 
-            Flower => "",
+            Flower => "花牌",
         }
     }
 
@@ -238,7 +246,7 @@ impl Yaku {
             Dragon3 => 88,
             AllGreen => 88,
             NineGates => 88,
-            FourKongs => 88,
+            Kong4 => 88,
             SevenShiftedPairs => 88,
             ThirteenOrphans => 88,
 
@@ -288,6 +296,7 @@ impl Yaku {
             MixedStraight => 8,
             Reversible => 8,
             ShiftPong3c => 8,
+            SamePong3c => 8,
             ChickenHand => 8,
             LastDraw => 8,
             LastClaim => 8,
@@ -298,10 +307,10 @@ impl Yaku {
             // 6
             AllPong => 6,
             HalfFlush => 6,
-            ShiftChow3c => 6,
             AllTypes => 6,
             AllMelded => 6,
             Dragon2 => 6,
+            ShiftChow3c => 6,
 
             // 4
             AllContainOutside => 4,
