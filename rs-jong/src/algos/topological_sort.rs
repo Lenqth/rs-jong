@@ -1,6 +1,6 @@
 use std::collections::{HashMap, HashSet};
 
-fn backwards<T>(graph: &HashMap<T, Vec<T>>) -> HashMap<T, HashSet<&T>>
+pub fn backwards<T>(graph: &HashMap<T, Vec<T>>) -> HashMap<T, HashSet<&T>>
 where T: Eq + std::hash::Hash + Clone, {
     let mut back: HashMap<T, HashSet<&T>> = HashMap::new();
     for (key_from, value) in graph.into_iter() {
