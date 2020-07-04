@@ -6,3 +6,7 @@ authors = ["Lenqth <nullptr00@gmail.com>"]
 [dependencies]
 lazy_static = "1.4.0"
 rand = "*"
+
+serde = { version = "1.0", features = ["derive"] }
+serde_yaml = "*"
+petgraph = "0.5.1"

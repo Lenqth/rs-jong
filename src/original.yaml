@@ -1,0 +1,469 @@
+yaku_info:
+  Wind4:
+    name_en: "Big Four Kongs"
+    name_ch: "大四喜"
+    score: 88
+    overrides:
+      - Wind3
+      - PrevWind
+      - SeatWind
+      - AllPong
+      - AllTermOrHonor
+  Dragon3:
+    name_en: "Big Three Dragons"
+    name_ch: "大三元"
+    score: 88
+    overrides:
+      - Dragon2
+      - Dragon1
+  AllGreen:
+    name_en: "All Green"
+    name_ch: "緑一色"
+    score: 88
+    overrides:
+      - HalfFlush
+  NineGates:
+    name_en: "Nine Gates"
+    name_ch: "九連宝燈"
+    score: 88
+    overrides:
+      - FullFlush
+      - TerminalPong
+      - ConcealedHand
+  Kong4:
+    name_en: "4 Kongs"
+    name_ch: "四槓"
+    score: 88
+    overrides:
+      - Kong3
+      - SingleWait
+      - AllPong
+  SevenShiftedPairs:
+    name_en: "Seven Shifted Pairs"
+    name_ch: "連七対"
+    score: 88
+    overrides:
+      - SevenPairs
+      - FullFlush
+      - ConcealedHand
+      - SingleWait
+  ThirteenOrphans:
+    name_en: "Thirteen Orphans"
+    name_ch: "十三么"
+    score: 88
+    overrides:
+      - AllTypes
+      - ConcealedHand
+      - SingleWait
+      - AllTermOrHonor
+  AllTerminals:
+    name_en: "All Terminals"
+    name_ch: "清么九"
+    score: 64
+    overrides:
+      - AllTermOrHonor
+      - AllPong
+      - NoHonor
+  Wind4s:
+    name_en: "Little Four Kongs"
+    name_ch: "小四喜"
+    score: 64
+    overrides:
+      - Wind3
+      - AllTermOrHonor
+      - HalfFlush
+  AllHonors:
+    name_en: "All Honors"
+    name_ch: "字一色"
+    score: 64
+    overrides:
+      - TerminalPong
+      - HalfFlush
+      - FullFlush
+      - AllPong
+  ConcPongs4:
+    name_en: "4 Concealed Pongs"
+    name_ch: "四暗刻"
+    score: 64
+    overrides:
+      - ConcPong3
+      - AllPong
+      - ConcealedHand
+  Souryu1c:
+    name_en: "Pure Terminal Chows"
+    name_ch: "一色双龍会"
+    score: 64
+    overrides:
+      - fullflush
+      - AllChows
+      - TwoTerminalChows
+      - DoubleChow1c
+  SameChow4:
+    name_en: "Quadruple Chow"
+    name_ch: "一色四同順"
+    score: 48
+    overrides:
+      - OneVoid
+  ShiftPong4:
+    name_en: "Four Pure Shifted Pongs"
+    name_ch: "一色四節高"
+    score: 48
+    overrides:
+      - OneVoid
+  ShiftChow4:
+    name_en: "Four Shifted Chows"
+    name_ch: "一色四歩高"
+    score: 32
+    overrides:
+      - OneVoid
+  Kong3:
+    name_en: "3 Kongs"
+    name_ch: "三槓"
+    score: 32
+    overrides: []
+  AllTermOrHonor:
+    name_en: "All Terminals/Honors"
+    name_ch: "混么九"
+    score: 32
+    overrides:
+      - AllPong
+      - TerminalPong
+      - AllContainOutside
+  SevenPairs:
+    name_en: "Seven Pairs"
+    name_ch: "七対"
+    score: 24
+    overrides:
+      - ConcealedHand
+      - SingleWait
+  GreaterKnits:
+    name_en: "Greater Honors And Knitted Tiles"
+    name_ch: "七星不靠"
+    score: 24
+    overrides:
+      - LesserKnits
+  AllEvenPungs:
+    name_en: "All Even Pongs"
+    name_ch: "全双刻"
+    score: 24
+    overrides:
+      - AllPong
+      - AllSimple
+  FullFlush:
+    name_en: "Full Flush"
+    name_ch: "清一色"
+    score: 24
+    overrides:
+      - HalfFlush
+      - NoHonor
+  SameChow3:
+    name_en: "Pure Triple Chow"
+    name_ch: "一色三同順"
+    score: 24
+    overrides:
+      - DoubleChow1c
+  ShiftPong3:
+    name_en: "Triple Pure Shifted Pongs"
+    name_ch: "一色三節高"
+    score: 24
+    overrides: []
+  All789:
+    name_en: "All Upper Tiles"
+    name_ch: "全大"
+    score: 24
+    overrides:
+      - All6789
+      - NoHonor
+  All456:
+    name_en: "All Middle Tiles"
+    name_ch: "全中"
+    score: 24
+    overrides:
+      - NoHonor
+      - AllSimple
+  All123:
+    name_en: "All Lower Tiles"
+    name_ch: "全小"
+    score: 24
+    overrides:
+      - All1234
+      - NoHonor
+  PureStraight:
+    name_en: "Pure Straight"
+    name_ch: "清龍"
+    score: 16
+    overrides:
+      - SixStraight
+      - TwoTerminalChows
+  Souryu3c:
+    name_en: "Three-Suited Terminal Chows"
+    name_ch: "三色双龍会"
+    score: 16
+    overrides:
+      - TwoTerminalChows
+      - AllChow
+      - DoubleChow2c
+  ShiftChow3:
+    name_en: "Three Shifted Chows"
+    name_ch: "一色三歩高"
+    score: 16
+    overrides: []
+  AllContain5:
+    name_en: "All Fives"
+    name_ch: "全帯五"
+    score: 16
+    overrides:
+      - AllSimple
+  SamePong3:
+    name_en: "Triple Pong"
+    name_ch: "三同刻"
+    score: 16
+    overrides:
+      - SamePong2
+  ConcPong3:
+    name_en: "3 Concealed Pongs"
+    name_ch: "三暗刻"
+    score: 16
+    overrides:
+      - ConcPong2
+  LesserKnits:
+    name_en: "Lesser Honors And Knitted Tiles"
+    name_ch: "全不靠"
+    score: 12
+    overrides:
+      - ConcealedHand
+      - SingleWait
+      - AllTypes
+  KnitStraight:
+    name_en: "Knitted Straight"
+    name_ch: "組合龍"
+    score: 12
+    overrides: []
+  All1234:
+    name_en: "Lower Four"
+    name_ch: "小于五"
+    score: 12
+    overrides:
+      - NoHonor
+  All6789:
+    name_en: "Upper Four"
+    name_ch: "大于五"
+    score: 12
+    overrides:
+      - NoHonor
+  Wind3:
+    name_en: "Three Winds"
+    name_ch: "三風刻"
+    score: 12
+    overrides:
+      - OneVoid
+  MixedStraight:
+    name_en: "Mixed Straight"
+    name_ch: "花龍"
+    score: 8
+    overrides: []
+  Reversible:
+    name_en: "Reversible Tiles"
+    name_ch: "推不倒"
+    score: 8
+    overrides:
+      - OneVoid
+  ShiftPong3c:
+    name_en: "Mixed Shifted Pongs"
+    name_ch: "三色三節高"
+    score: 8
+    overrides: []
+  SamePong3c:
+    name_en: "Mixed Triple Chow"
+    name_ch: "三色三同順"
+    score: 8
+    overrides:
+      - DoubleChow2c
+  ChickenHand:
+    name_en: "Chicken Hand"
+    name_ch: "無番和"
+    score: 8
+  LastDraw:
+    name_en: "Last Tile Draw"
+    name_ch: "妙手回春"
+    score: 8
+    overrides:
+      - SelfDraw
+  LastClaim:
+    name_en: "Last Tile Claim"
+    name_ch: "海底撈月"
+    score: 8
+    overrides: []
+  Replacement:
+    name_en: "Out With Replacement Tile"
+    name_ch: "槓上開花"
+    score: 8
+    overrides:
+      - SelfDraw
+  RobKong:
+    name_en: "Robbing The Kongs"
+    name_ch: "搶槓和"
+    score: 8
+    overrides:
+      - lasttile
+  ConcKong2:
+    name_en: "2 Concealed Kongs"
+    name_ch: "双暗槓"
+    score: 8
+    overrides:
+      - ConcKong
+      - Kong2
+  ShiftChow3c:
+    name_en: "Mixed Shifted Chows"
+    name_ch: "三色三歩高"
+    score: 6
+    overrides: []
+  AllPong:
+    name_en: "All Pongs"
+    name_ch: "碰碰和"
+    score: 6
+    overrides: []
+  HalfFlush:
+    name_en: "Half Flush"
+    name_ch: "混一色"
+    score: 6
+    overrides:
+      - OneVoid
+  AllTypes:
+    name_en: "All Types"
+    name_ch: "五門斉"
+    score: 6
+    overrides: []
+  AllMelded:
+    name_en: "Melded Hand"
+    name_ch: "全求人"
+    score: 6
+    overrides:
+      - SingleWait
+  Dragon2:
+    name_en: "Two Dragons"
+    name_ch: "双箭刻"
+    score: 6
+    overrides:
+      - Dragon1
+  AllContainOutside:
+    name_en: "Outside Hand"
+    name_ch: "全帯么"
+    score: 4
+    overrides: []
+  AllConc:
+    name_en: "Fully Concealed"
+    name_ch: "不求人"
+    score: 4
+    overrides:
+      - ConcealedHand
+      - SelfDraw
+  Kong2:
+    name_en: "2 Kongs"
+    name_ch: "双明槓"
+    score: 4
+    overrides:
+      - Kong1
+  LastTile:
+    name_en: "Last Tile"
+    name_ch: "和絶張"
+    score: 4
+    overrides: []
+  Dragon1:
+    name_en: "Dragon Pong"
+    name_ch: "箭刻"
+    score: 2
+  PrevWind:
+    name_en: "Prevalent Wind"
+    name_ch: "圏風刻"
+    score: 2
+  SeatWind:
+    name_en: "Seat Wind"
+    name_ch: "門風刻"
+    score: 2
+  ConcealedHand:
+    name_en: "Concealed Hand"
+    name_ch: "門前清"
+    score: 2
+  AllChows:
+    name_en: "All Chows"
+    name_ch: "平和"
+    score: 2
+    overrides:
+      - NoHonor
+  FourTiles:
+    name_en: "Tile Hog"
+    name_ch: "四帰一"
+    score: 2
+  SamePong2:
+    name_en: "Double Pong"
+    name_ch: "双同刻"
+    score: 2
+  ConcPong2:
+    name_en: "2 Concealed Pongs"
+    name_ch: "双暗刻"
+    score: 2
+  ConcKong:
+    name_en: "Concealed Kong"
+    name_ch: "暗槓"
+    score: 2
+    overrides:
+      - Kong1
+  AllSimple:
+    name_en: "All Simples"
+    name_ch: "断么"
+    score: 2
+    overrides:
+      - NoHonor
+  DoubleChow1c:
+    name_en: "Pure Double Chow"
+    name_ch: "一般高"
+    score: 1
+  DoubleChow2c:
+    name_en: "Mixed Double Chow"
+    name_ch: "喜相逢"
+    score: 1
+  SixStraight:
+    name_en: "Short Straight"
+    name_ch: "連六"
+    score: 1
+  TwoTerminalChows:
+    name_en: "Two Terminal Chows"
+    name_ch: "老少副"
+    score: 1
+  TerminalPong:
+    name_en: "Pong Of Terminals/Honors"
+    name_ch: "么九刻"
+    score: 1
+  Kong1:
+    name_en: "Kong"
+    name_ch: "明槓"
+    score: 1
+  OneVoid:
+    name_en: "One Voided Suit"
+    name_ch: "缺一門"
+    score: 1
+  NoHonor:
+    name_en: "No Honor"
+    name_ch: "無字"
+    score: 1
+  EdgeWait:
+    name_en: "Edge Wait"
+    name_ch: "辺張"
+    score: 1
+  ClosedWait:
+    name_en: "Closed Wait"
+    name_ch: "坎張"
+    score: 1
+  SingleWait:
+    name_en: "Single Wait"
+    name_ch: "単調将"
+    score: 1
+  SelfDraw:
+    name_en: "Self Drawn"
+    name_ch: "自摸"
+    score: 1
+  Flower:
+    name_en: "Flower"
+    name_ch: "花牌"
+    score: 1
